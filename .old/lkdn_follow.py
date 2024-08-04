@@ -7,6 +7,7 @@ PAUSE = 0.3
 # Abrir o chrome
 press('win')
 write('chrome')
+sleep(0.5)
 press('enter')
 
 sleep(2)
@@ -26,7 +27,7 @@ sleep(5)
 
 # Localizar o botão 'pessoas' e clicar
 click('pessoas_btn')
-sleep(2)
+sleep(3)
 
 # Localizar o botão 'empresa atual' e clicar
 click('empresa_atual_btn')

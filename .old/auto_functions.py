@@ -1,6 +1,7 @@
 import pyautogui as pag
 from time import sleep
 
+## Versão PYAYTOGUI
 def connect(count):
     """
     count = Quantidade de vezes que o botão conectar será apertado
@@ -37,4 +38,7 @@ def connect(count):
                 return
 
 def click(img_name):
+    print(img_name)
     return pag.click(pag.locateOnScreen('images/' + img_name + '.png'))
+
+
