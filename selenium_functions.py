@@ -16,12 +16,17 @@ def connect(driver, count):
         print(f'{len(botoes_conectar)} botoes conectar encontrados')
 
         for botao in botoes_conectar:
+            print("entrando ciclo for")
             botao.click()
             n += 1
-            sleep(0.3)
+            sleep(1)
 
             if n == count:
                 return
-            
-        nav.find_element('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Avançar"]]').click()
+        
+        print("clicando em mudado")
+        # Problema: não está encontrando o botão avançar
+        nav.find_element('xpath', '//*[@aria-label="Avançar"]').click()
+        sleep(3)
+        print("dormindo")
         

@@ -3,6 +3,9 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 import selenium_functions
 
@@ -27,17 +30,19 @@ webdriver.ActionChains(navegador).send_keys(Keys.ENTER).perform()
 sleep(2)
 #%%
 # Apertar o botão pessoas
-navegador.find_element('xpath', '//*[@id="search-reusables__filters-bar"]/ul/li[3]/button').click()
-
+WebDriverWait(navegador, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[contains(@class, "artdeco-pill") and text()="Pessoas"]'))).click()
 
 #%%
 # Apertar o botão empresas e filtrar
-navegador.find_element('xpath', '//*[@id="searchFilter_currentCompany"]').click()
-navegador.find_element('xpath', '//*[@id="artdeco-hoverable-artdeco-gen-63"]/div[1]/div/form/fieldset/div[1]/ul/li[2]/label').click()
+WebDriverWait(navegador, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchFilter_currentCompany"]'))).click()
+sleep(1)
+navegador.find_element('xpath', '//*[contains(@class, "search-reusables__value-label") and .//.//.//span[text()="Data Mundo"]]').click()
 #%%
 # Apertar em buscar resultados
 exibir_resultados = navegador.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]') 
 exibir_resultados[1].click()
 # %%
+print("Executando função de conectar")
+# Problema na função abaixo:
 selenium_functions.connect(driver=navegador, count=15)
 # %%
