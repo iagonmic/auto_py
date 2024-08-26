@@ -39,10 +39,8 @@ sleep(1)
 navegador.find_element('xpath', '//*[contains(@class, "search-reusables__value-label") and .//.//.//span[text()="Data Mundo"]]').click()
 #%%
 # Apertar em buscar resultados
-exibir_resultados = navegador.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]') 
-exibir_resultados[1].click()
+navegador.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')[1].click()
 # %%
-print("Executando função de conectar")
-# Problema na função abaixo:
-selenium_functions.connect(driver=navegador, count=15)
+# Executando função de conectar
+selenium_functions.connect(driver=navegador, count=2)
 # %%
