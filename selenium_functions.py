@@ -1,5 +1,6 @@
 from time import sleep
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,18 +34,19 @@ def connect(driver, count):
 
             if n == count:
                 return
-        
-        print("rolando a página")
-        footer = nav.find_element(By.TAG_NAME, "footer")
-        delta_y = footer.rect['y']
-        print(f"delta_y = {delta_y}")
 
         # TODO: ActionChains.scroll_by_amount() missing 1 required positional argument: 'delta_y'
-        ActionChains.scroll_by_amount(0, delta_y).perform()
-
+        sleep(1)
+        ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
         print("Esperando botão 'avançar' ser clicado")
-        WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
-        
+
+        try:
+            WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+        except:
+            sleep(2)
+            ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
+            WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+            
         sleep(3)
         print("dormindo")
         

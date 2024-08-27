@@ -42,5 +42,5 @@ navegador.find_element('xpath', '//*[contains(@class, "search-reusables__value-l
 navegador.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')[1].click()
 # %%
 # Executando função de conectar
-selenium_functions.connect(driver=navegador, count=2)
+selenium_functions.connect(driver=navegador, count=15)
 # %%
