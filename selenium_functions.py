@@ -41,7 +41,7 @@ def connect(driver, count):
         print("Esperando botão 'avançar' ser clicado")
 
         try:
-            WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+            WebDriverWait(nav, 5).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
         except:
             sleep(2)
             ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
