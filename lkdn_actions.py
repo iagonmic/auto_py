@@ -88,7 +88,5 @@ def lkdn_msg_new_connections(navegador):
         navegador.find_element('xpath', '//button[contains(@class, "msg-form__send-button")]').click()
 
         # Verificar se mensagem foi enviada e fechar aba de mensagem atual
-        while len(navegador.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) == 0:
-            sleep(1)
-        
-        ActionChains(navegador).send_keys(Keys.ESCAPE).perform()
+        if WebDriverWait(navegador, 20).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "msg-s-event")]'))):
+            ActionChains(navegador).send_keys(Keys.ESCAPE).perform()
