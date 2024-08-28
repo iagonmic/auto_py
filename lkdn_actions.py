@@ -92,12 +92,3 @@ def lkdn_msg_new_connections(navegador):
             sleep(1)
         
         ActionChains(navegador).send_keys(Keys.ESCAPE).perform()
-        
-#%%
-if __name__ == "__main__":
-    #%%
-    navegador = define_chrome_options()
-    #%%
-    lkdn_follow(navegador)
-    #%%
-    lkdn_msg_new_connections(navegador)
