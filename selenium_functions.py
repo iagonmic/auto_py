@@ -1,10 +1,26 @@
 from time import sleep
+
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
+def define_chrome_options():        
+    servico = Service(ChromeDriverManager().install())
+
+    opcoes = webdriver.ChromeOptions()
+    opcoes.add_argument('user-data-dir=C:/Users/User/AppData/Local/Google/Chrome/User Data')
+    opcoes.add_experimental_option('detach', True)
+
+    navegador = webdriver.Chrome(service=servico, options=opcoes)
+    
+    return navegador
 
 def connect(driver, count):
     """
