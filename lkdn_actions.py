@@ -13,65 +13,66 @@ from pyperclip import copy
 import selenium_functions
 
 #%%
-def lkdn_follow(navegador):
+def lkdn_follow(text: str, driver, count, business=None):
     #%%      
     # Entrar no linkedin
-    navegador.get('https://br.linkedin.com/')
+    driver.get('https://br.linkedin.com/')
 
     # Buscar por analista de dados e apertar enter
-    navegador.find_element('xpath', '//*[@id="global-nav-typeahead"]/input').send_keys('analista de dados')
-    ActionChains(navegador).send_keys(Keys.ENTER).perform()
+    driver.find_element('xpath', '//*[@id="global-nav-typeahead"]/input').send_keys(str(text))
+    ActionChains(driver).send_keys(Keys.ENTER).perform()
 
     sleep(randint(1,3))
     #%%
     # Apertar o botão pessoas
-    WebDriverWait(navegador, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[contains(@class, "artdeco-pill") and text()="Pessoas"]'))).click()
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[contains(@class, "artdeco-pill") and text()="Pessoas"]'))).click()
 
     #%%
     # Apertar o botão empresas e filtrar
-    WebDriverWait(navegador, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchFilter_currentCompany"]'))).click()
-    sleep(randint(1,3))
-    navegador.find_element('xpath', '//*[contains(@class, "search-reusables__value-label") and .//.//.//span[text()="Data Mundo"]]').click()
+    if business is not None:
+        WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchFilter_currentCompany"]'))).click()
+        sleep(randint(1,3))
+        driver.find_element('xpath', f'//*[contains(@class, "search-reusables__value-label") and .//.//.//span[contains(text(), "{str(business).capitalize()}")]]').click()
     #%%
     # Apertar em buscar resultados
-    navegador.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')[1].click()
+        driver.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')[1].click()
     # %%
     # Executando função de conectar
-    selenium_functions.connect(driver=navegador, count=15)
+    selenium_functions.connect(driver, count)
 
-def lkdn_msg_new_connections(navegador):
+def lkdn_msg_new_connections(driver):
     #%% Entrar em minha rede
-    navegador.get('https://www.linkedin.com/mynetwork/')
+    driver.get('https://www.linkedin.com/mynetwork/')
 
     #%% Clicar no botão de visualizar se existir
-    if WebDriverWait(navegador, 5).until(EC.element_to_be_clickable((By.XPATH, '//a[contains(@aria-label, "Visualizar")]'))):
-        navegador.find_element('xpath', '//a[contains(@aria-label, "Visualizar")]').click()
+    if WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//a[contains(@aria-label, "Visualizar")]'))):
+        driver.find_element('xpath', '//a[contains(@aria-label, "Visualizar")]').click()
         
         #%% Clicar nos botões aceitar
-        for aceitar_btn in navegador.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]'):
+        for aceitar_btn in driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]'):
             sleep(randint(1,3))
             aceitar_btn.click()
 
     #%% Ir em "gerenciar minhas conexões"
-    navegador.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
+    driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
 
     #%% Realizar loop e enviar mensagem até que encontre uma pessoa que ainda não enviou
-    for enviar_mensagem_btn in navegador.find_elements('xpath', '//button[contains(@aria-label, "Enviar mensagem")]')[3:]:
+    for enviar_mensagem_btn in driver.find_elements('xpath', '//button[contains(@aria-label, "Enviar mensagem")]')[3:]:
         # Clicar no botão enviar mensagem
         enviar_mensagem_btn.click()
         sleep(randint(1,3))
 
         # Verificar se já existe alguma mensagem mandada antes
-        if len(navegador.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) != 0:
+        if len(driver.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) != 0:
             break
         # Receber texto de acordo com o usuário que está aparecendo na tela
-        text = new_connection_msg(navegador)
+        text = new_connection_msg(driver)
         copy(text)
         # Colar texto dentro da text_box do usuário a ser enviado mensagem
         
-        text_box = navegador.find_element('xpath', '//div[contains(@class, "msg-form__contenteditable")]')
+        text_box = driver.find_element('xpath', '//div[contains(@class, "msg-form__contenteditable")]')
         
-        (ActionChains(navegador)
+        (ActionChains(driver)
             .click(text_box)
             .key_down(Keys.CONTROL)
             .send_keys('a')
@@ -85,8 +86,8 @@ def lkdn_msg_new_connections(navegador):
         
         sleep(randint(1,3))
         # Enviar mensagem
-        navegador.find_element('xpath', '//button[contains(@class, "msg-form__send-button")]').click()
+        driver.find_element('xpath', '//button[contains(@class, "msg-form__send-button")]').click()
 
         # Verificar se mensagem foi enviada e fechar aba de mensagem atual
-        if WebDriverWait(navegador, 20).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "msg-s-event")]'))):
-            ActionChains(navegador).send_keys(Keys.ESCAPE).perform()
+        if WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "msg-s-event")]'))):
+            ActionChains(driver).send_keys(Keys.ESCAPE).perform()

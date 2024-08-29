@@ -24,6 +24,7 @@ def define_chrome_options():
     
     return navegador
 
+
 def connect(nav, count):
     """
     count = Quantidade de vezes que o botão conectar será apertado
@@ -33,37 +34,45 @@ def connect(nav, count):
     """
     n = 0
     while True:
-        
-        botoes_conectar = nav.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')
-        
-        print(f'{len(botoes_conectar)} botoes conectar encontrados')
+        try:
+            botoes_conectar = WebDriverWait(nav, 4).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')))
 
-        for botao in botoes_conectar:
+            for botao in botoes_conectar:
             
-            botao.click()
-            n += 1
-            sleep(randint(1,3))
-            print(f"n = {n}")
+                botao.click()
+                n += 1
+                sleep(randint(1,3))
+                print(f"Total de botões conectados até o momento: {n}")
 
-            if nav.find_element('xpath', '*//span[text()="Adicionar nota"]'):
-                nav.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
+                if nav.find_element('xpath', '*//span[text()="Adicionar nota"]'):
+                    nav.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
 
-            if n == count:
-                return
-            
+                if n == count:
+                    print(f"{n} botões conectar foram clicados!")
+                    print("Encerrando função conectar...")
+                    return
+        except:
+            print("Nenhum botão conectar encontrado, avançando...")
+
         sleep(randint(1,3))
         ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
-        print("Esperando botão 'avançar' ser clicado")
 
         try:
             WebDriverWait(nav, 5).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
         except:
             sleep(randint(1,3))
             ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
-            WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+            try:
+                WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+            except:
+                print("ERRO: Nenhum botão 'avançar' encontrado.")
+                print(f"{n} botões conectar foram clicados!")
+                print("Encerrando função conectar...")
+                return # Caso não tenha mais nenhum botão avançar
 
         sleep(randint(1,3))
-        print("dormindo")
+        print("Lendo próxima página")
+
 
 def new_connection_msg(navegador):
     texto = \
