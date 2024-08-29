@@ -1,5 +1,5 @@
 #%%
-from selenium_functions import define_chrome_options, new_connection_msg
+from selenium_functions import new_connection_msg
 from selenium.webdriver import ActionChains
 
 from selenium.webdriver.common.keys import Keys
@@ -45,19 +45,25 @@ def lkdn_msg_new_connections(driver):
     driver.get('https://www.linkedin.com/mynetwork/')
 
     #%% Clicar no botão de visualizar se existir
-    if WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//a[contains(@aria-label, "Visualizar")]'))):
-        driver.find_element('xpath', '//a[contains(@aria-label, "Visualizar")]').click()
-        
-        #%% Clicar nos botões aceitar
-        for aceitar_btn in driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]'):
-            sleep(randint(1,3))
-            aceitar_btn.click()
+    WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//a[.//span[text()="Gerenciar"]]'))).click()
+    sleep(randint(1,3))
+    
+    #%% Clicar nos botões aceitar
 
+    botoes_aceitar = driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]')
+
+    while len(botoes_aceitar) > 0:
+        for aceitar_btn in botoes_aceitar:
+            aceitar_btn.click()
+            sleep(randint(1,3))
+
+        botoes_aceitar = driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]')
+            
     #%% Ir em "gerenciar minhas conexões"
     driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
 
     #%% Realizar loop e enviar mensagem até que encontre uma pessoa que ainda não enviou
-    for enviar_mensagem_btn in driver.find_elements('xpath', '//button[contains(@aria-label, "Enviar mensagem")]')[3:]:
+    for enviar_mensagem_btn in WebDriverWait(driver,5).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@aria-label, "Enviar mensagem")]'))):
         # Clicar no botão enviar mensagem
         enviar_mensagem_btn.click()
         sleep(randint(1,3))

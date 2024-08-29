@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 
 
-def define_chrome_options():        
+def define_chrome_driver():        
     servico = Service(ChromeDriverManager().install())
 
     opcoes = webdriver.ChromeOptions()
@@ -25,27 +25,38 @@ def define_chrome_options():
     return navegador
 
 
-def connect(nav, count):
+def connect(driver, count):
     """
     count = Quantidade de vezes que o botão conectar será apertado
     ------------------------------------------------------------
     Procurar pelo botão "conectar" e o botão "avançar". Se o botão conectar não estiver na tela, procurar pelo botão avançar.
     Se o botão avançar não estiver na tela ainda, rolar e repetir o processo.
     """
+    if count <= 0:
+        return
+    
     n = 0
     while True:
         try:
-            botoes_conectar = WebDriverWait(nav, 4).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')))
+            botoes_conectar = WebDriverWait(driver, 4).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')))
 
             for botao in botoes_conectar:
             
                 botao.click()
                 n += 1
-                sleep(randint(1,3))
                 print(f"Total de botões conectados até o momento: {n}")
+                
+                if WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.XPATH, '*//span[text()="Adicionar nota"]'))):
+                    driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
 
-                if nav.find_element('xpath', '*//span[text()="Adicionar nota"]'):
-                    nav.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
+                sleep(randint(2,4))
+
+                if botao in WebDriverWait(driver, randint(2,4)).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]'))):
+                    botao.click()
+                    sleep(randint(1,3))
+
+                    if WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.XPATH, '*//span[text()="Adicionar nota"]'))):
+                        driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
 
                 if n == count:
                     print(f"{n} botões conectar foram clicados!")
@@ -55,15 +66,19 @@ def connect(nav, count):
             print("Nenhum botão conectar encontrado, avançando...")
 
         sleep(randint(1,3))
-        ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
+
+        if len(driver.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')) > 0:
+                continue
+
+        ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
 
         try:
-            WebDriverWait(nav, 5).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+            WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
         except:
             sleep(randint(1,3))
-            ActionChains(nav).send_keys(Keys.PAGE_DOWN).perform()
+            ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
             try:
-                WebDriverWait(nav, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
+                WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//button[.//span[text()="Avançar"]]'))).click()
             except:
                 print("ERRO: Nenhum botão 'avançar' encontrado.")
                 print(f"{n} botões conectar foram clicados!")
