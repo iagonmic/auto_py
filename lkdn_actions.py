@@ -14,7 +14,6 @@ import selenium_functions
 
 #%%
 def lkdn_follow(text: str, driver, count, business=None):
-    #%%      
     # Entrar no linkedin
     driver.get('https://br.linkedin.com/')
 
@@ -40,26 +39,26 @@ def lkdn_follow(text: str, driver, count, business=None):
     # Executando função de conectar
     selenium_functions.connect(driver, count)
 
+
 def lkdn_msg_new_connections(driver):
     #%% Entrar em minha rede
-    driver.get('https://www.linkedin.com/mynetwork/')
+    driver.get('https://www.linkedin.com/mynetwork/invitation-manager/')
 
-    #%% Clicar no botão de visualizar se existir
-    WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//a[.//span[text()="Gerenciar"]]'))).click()
-    sleep(randint(1,3))
-    
     #%% Clicar nos botões aceitar
+    try:
+        botoes_aceitar = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@aria-label, "Aceitar")]')))
 
-    botoes_aceitar = driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]')
-
-    while len(botoes_aceitar) > 0:
         for aceitar_btn in botoes_aceitar:
             aceitar_btn.click()
             sleep(randint(1,3))
-
-        botoes_aceitar = driver.find_elements('xpath', '//button[contains(@aria-label, "Aceitar")]')
+            
+    except:
+        pass
             
     #%% Ir em "gerenciar minhas conexões"
+    # TODO: trocar para https://www.linkedin.com/messaging/ e ajeitar o código
+    # TODO: configurar exceção para quando tiver uma mensagem na tela, verificando a quantidade de 'x' na tela, 
+    # e se for maior que 1, fechar todos antes de prosseguir em clicar no botão enviar_mensagem
     driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
 
     #%% Realizar loop e enviar mensagem até que encontre uma pessoa que ainda não enviou

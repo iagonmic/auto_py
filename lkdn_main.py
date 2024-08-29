@@ -17,18 +17,22 @@ def main(driver=None):
         business_ask = int(input("Digite 1 se você quer filtrar por alguma empresa, ou digite 0 para não filtrar por nenhuma empresa: "))
         count = int(input("Digite a quantidade de pessoas que você quer se conectar: "))
 
+        while count <= 0:
+            print("Digite uma contagem maior que 0\n")
+            count = int(input("Digite a quantidade de pessoas que você quer se conectar: "))
+
         if business_ask == 1:
             business = input("Digite o nome da empresa que você quer filtrar (ex: 'data mundo')")
 
         if driver is None:
             driver = define_chrome_driver()
-            
+    
         lkdn_follow(text, driver, count)
 
     elif opt == 2:
         if driver is None:
             driver = define_chrome_driver()
-
+            
         lkdn_msg_new_connections(driver)
 
     else:
