@@ -29,12 +29,17 @@ def lkdn_follow(text: str, driver, count, business=None):
     #%%
     # Apertar o botão empresas e filtrar
     if business is not None:
+        business = str(business).title()
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchFilter_currentCompany"]'))).click()
-        sleep(randint(1,3))
-        driver.find_element('xpath', f'//*[contains(@class, "search-reusables__value-label") and .//.//.//span[contains(text(), "{str(business).capitalize()}")]]').click()
+        try:
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, f'//*[contains(@class, "search-reusables__value-label") and .//.//.//span[contains(text(), "{business}")]]'))).click()
+        except:
+            driver.find_element('xpath', '//input[@placeholder="Adicionar empresa"]').click()
+            ActionChains(driver).send_keys(business).perform()
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, f'//div[contains(@id, "basic-result") and .//span[contains(., "{business}")]]'))).click()
     #%%
     # Apertar em buscar resultados
-        driver.find_elements('xpath', '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')[1].click()
+        WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Exibir resultados"]]')))[1].click()
     # %%
     # Executando função de conectar
     selenium_functions.connect(driver, count)

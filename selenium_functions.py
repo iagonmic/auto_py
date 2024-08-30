@@ -49,7 +49,10 @@ def connect(driver, count):
                 if WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.XPATH, '*//span[text()="Adicionar nota"]'))):
                     driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
 
-                sleep(randint(2,4))
+                if driver.find_element('xpath', '//button[@aria-label="Entendi"]'):
+                    driver.find_element('xpath', '//button[@aria-label="Entendi"]').click()
+
+                sleep(randint(1,4))
 
                 if botao in WebDriverWait(driver, randint(2,4)).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]'))):
                     botao.click()
