@@ -55,18 +55,39 @@ def connect(driver, count):
                 driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
 
             try:
+                WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//div[@data-test-modal-id="send-invite-modal"]')))
+                botoes_conectar.remove(botao)
+                driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
+            except:
+                pass
+
+            try:
                 driver.find_element('xpath', '//button[@aria-label="Entendi"]').click()
+                botao.click()
             except:
                 pass
 
             sleep(randint(1,4))
 
-            if botao in WebDriverWait(driver, randint(2,4)).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]'))):
-                botao.click()
-                sleep(randint(1,3))
+            new_temp_list = []
+            try:
+                new_temp_list = WebDriverWait(driver, randint(2,4)).until(EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]')))
+            except:
+                pass
 
-                if WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.XPATH, '*//span[text()="Adicionar nota"]'))):
-                    driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
+            if botao in botoes_conectar:
+                if botao in new_temp_list:
+                    botao.click()
+                    sleep(randint(1,3))
+
+                    try:
+                        WebDriverWait(driver, 4).until(EC.presence_of_element_located((By.XPATH, '*//span[text()="Adicionar nota"]')))
+                        driver.find_element('xpath', '*//button[@aria-label="Enviar sem nota"]').click()
+                    except:
+                        pass
+                
+                
+                
 
             if n == count:
                 print(f"{n} botões conectar foram clicados!")
