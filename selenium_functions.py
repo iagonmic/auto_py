@@ -70,6 +70,7 @@ def connect(driver, count):
     n = 0
     botoes_conectar = []
     while True:
+        eliminate_msg(driver)
         try:
             # Resolver problema de botão clicado ou não, rastrear com POO
             if len(botoes_conectar) == 0:
@@ -153,7 +154,6 @@ def connect(driver, count):
         # desce a página até o final e clica no botão avançar
         ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
 
-        # TODO: problema no botão avançar
         botao_avancar = None
         try:
             botao_avancar = Button(WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Avançar"]]'))))
@@ -200,7 +200,15 @@ Iago Flávio."""
 
     return texto[:5] + nome.split()[0] + texto[5:]
 
-# TODO: fazer função eliminate_msg
-
 def eliminate_msg(driver):
-    pass
+    list = []
+    try:
+        list = WebDriverWait(driver,2).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@class, "msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary")]')))
+        if len(list) == 0:
+            return
+    except:
+        pass
+    
+    for close_button in list:
+        close_button.click()
+        sleep(randint(1,2))

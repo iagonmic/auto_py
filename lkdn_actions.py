@@ -1,5 +1,5 @@
 #%%
-from selenium_functions import new_connection_msg
+from selenium_functions import new_connection_msg, eliminate_msg
 from selenium.webdriver import ActionChains
 
 from selenium.webdriver.common.keys import Keys
@@ -49,25 +49,24 @@ def lkdn_msg_new_connections(driver):
     #%% Entrar em minha rede
     driver.get('https://www.linkedin.com/mynetwork/invitation-manager/')
 
+    eliminate_msg(driver)
     #%% Clicar nos botões aceitar
     try:
         botoes_aceitar = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@aria-label, "Aceitar")]')))
-
         for aceitar_btn in botoes_aceitar:
             aceitar_btn.click()
             sleep(randint(1,3))
-            
     except:
         pass
             
-    #%% Ir em "gerenciar minhas conexões"
-    # TODO: trocar para https://www.linkedin.com/messaging/ e ajeitar o código
-    # TODO: configurar exceção para quando tiver uma mensagem na tela, verificando a quantidade de 'x' na tela, 
-    # e se for maior que 1, fechar todos antes de prosseguir em clicar no botão enviar_mensagem
-    driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
+    # Ir em "gerenciar minhas conexões"
+    while driver.current_url != 'https://www.linkedin.com/mynetwork/invite-connect/connections/':
+        driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
+        sleep(2)
 
     #%% Realizar loop e enviar mensagem até que encontre uma pessoa que ainda não enviou
     for enviar_mensagem_btn in WebDriverWait(driver,5).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@aria-label, "Enviar mensagem")]'))):
+        eliminate_msg(driver)
         # Clicar no botão enviar mensagem
         enviar_mensagem_btn.click()
         sleep(randint(1,3))

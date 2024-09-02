@@ -27,13 +27,13 @@ def main(driver=None):
 
         if driver is None:
             driver = define_chrome_driver()
-    
+
         lkdn_follow(text, driver, count, business)
 
     elif opt == 2:
         if driver is None:
             driver = define_chrome_driver()
-            
+
         lkdn_msg_new_connections(driver)
 
     else:
