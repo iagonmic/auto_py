@@ -18,7 +18,7 @@ def lkdn_follow(text: str, driver, count, business=None):
     driver.get('https://br.linkedin.com/')
 
     # Buscar por analista de dados e apertar enter
-    driver.find_element('xpath', '//*[@id="global-nav-typeahead"]/input').send_keys(str(text))
+    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="global-nav-typeahead"]/input'))).send_keys(str(text))
     ActionChains(driver).send_keys(Keys.ENTER).perform()
 
     sleep(randint(1,3))
