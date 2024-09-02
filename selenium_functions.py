@@ -100,6 +100,7 @@ def connect(driver, count):
             try:
                 WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '//div[@data-test-modal-id="send-invite-modal"]')))
                 driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
+                n -= 1
                 continue
             except:
                 pass
@@ -135,6 +136,7 @@ def connect(driver, count):
                         continue
                     except:
                         pass
+            
                 
             # quebrar o ciclo for se n for atingido
             if n == count:
@@ -161,13 +163,22 @@ def connect(driver, count):
             print("Encerrando função conectar...")
             return # Caso não tenha mais nenhum botão avançar
 
-        print(botao_avancar.element)
-
         while True:
-            botao_avancar.click_button() # não quero registrar o clique aqui
+            try:
+                WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[contains(@class, artdeco-button) and .//span[contains(., "Retirar")]]')))
+                driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
+            except:
+                pass
+
+            if botao_avancar.clicked == True:
+                botao_avancar = Button(WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Avançar"]]'))))
+
+            if botao_avancar.find_button_by_xpath(driver, '//button[.//span[text()="Avançar"]]'):
+                botao_avancar.click_button() # não registrar o clique aqui
+
             sleep(randint(2,4))
 
-            if botao_avancar.find_button_by_xpath(driver, '//button[.//span[text()="Avançar"]]') is None:
+            if botao_avancar.find_button_by_xpath(driver, '//button[.//span[text()="Avançar"]]') is not botao_avancar.element:
                 break
 
             ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform() # desce a página e clica no botão avançar novamente
@@ -189,5 +200,7 @@ Iago Flávio."""
 
     return texto[:5] + nome.split()[0] + texto[5:]
 
+# TODO: fazer função eliminate_msg
 
-        
+def eliminate_msg(driver):
+    pass
