@@ -94,6 +94,13 @@ def connect(driver, count):
 
             print(f"Total de botões conectados até o momento: {n}")
 
+            # exceção para ignorar o retirar convite caso clique duas vezes
+            try:
+                WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[contains(@class, artdeco-button) and .//span[contains(., "Retirar")]]')))
+                driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
+            except:
+                pass
+
             # exceção após o clique do botão em convite personalizado            
             if botao.find_button_by_xpath(driver, '*//span[text()="Adicionar nota"]') is not None:
                 botao.click_button_by_xpath(driver, '*//button[@aria-label="Enviar sem nota"]')
