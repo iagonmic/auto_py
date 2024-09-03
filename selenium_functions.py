@@ -89,17 +89,15 @@ def connect(driver, count):
 
         for botao in botoes_conectar:
 
+            pending_invite_msg_close(driver)
+
             botao.click_button()
             n += 1
 
             print(f"Total de botões conectados até o momento: {n}")
 
             # exceção para ignorar o retirar convite caso clique duas vezes
-            try:
-                WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[contains(@class, artdeco-button) and .//span[contains(., "Retirar")]]')))
-                driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
-            except:
-                pass
+            pending_invite_msg_close(driver)
 
             # exceção após o clique do botão em convite personalizado            
             if botao.find_button_by_xpath(driver, '*//span[text()="Adicionar nota"]') is not None:
@@ -171,11 +169,7 @@ def connect(driver, count):
             return # Caso não tenha mais nenhum botão avançar
 
         while True:
-            try:
-                WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[contains(@class, artdeco-button) and .//span[contains(., "Retirar")]]')))
-                driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
-            except:
-                pass
+            pending_invite_msg_close(driver)
 
             if botao_avancar.clicked == True:
                 botao_avancar = Button(WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Avançar"]]'))))
@@ -219,3 +213,10 @@ def eliminate_msg(driver):
     for close_button in list:
         close_button.click()
         sleep(randint(1,2))
+
+def pending_invite_msg_close(driver):
+    try:
+        WebDriverWait(driver,5).until(EC.presence_of_element_located((By.XPATH, '//button[contains(@class, artdeco-button) and .//span[contains(., "Retirar")]]')))
+        driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
+    except:
+        pass
