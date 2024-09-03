@@ -73,6 +73,7 @@ def lkdn_msg_new_connections(driver):
 
         # Verificar se já existe alguma mensagem mandada antes
         if len(driver.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) != 0:
+            ActionChains(driver).send_keys(Keys.ESCAPE).perform()
             break
         # Receber texto de acordo com o usuário que está aparecendo na tela
         text = new_connection_msg(driver)
