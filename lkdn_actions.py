@@ -58,11 +58,10 @@ def lkdn_msg_new_connections(driver):
             sleep(randint(1,3))
     except:
         pass
+
+    driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
             
     # Ir em "gerenciar minhas conexões"
-    while driver.current_url != 'https://www.linkedin.com/mynetwork/invite-connect/connections/':
-        driver.get('https://www.linkedin.com/mynetwork/invite-connect/connections/')
-        sleep(2)
 
     #%% Realizar loop e enviar mensagem até que encontre uma pessoa que ainda não enviou
     for enviar_mensagem_btn in WebDriverWait(driver,5).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@aria-label, "Enviar mensagem")]'))):
@@ -70,6 +69,9 @@ def lkdn_msg_new_connections(driver):
         # Clicar no botão enviar mensagem
         enviar_mensagem_btn.click()
         sleep(randint(1,3))
+
+        if 'https://www.linkedin.com/messaging' in driver.current_url:
+            lkdn_msg_new_connections(driver)
 
         # Verificar se já existe alguma mensagem mandada antes
         if len(driver.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) != 0:
