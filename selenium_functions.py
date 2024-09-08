@@ -77,16 +77,14 @@ def connect(driver, count):
                 botoes_conectar = button_list(WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((
                     By.XPATH, '//*[contains(@class, "artdeco-button") and .//span[text()="Conectar"]]'))))
                 
-            print(f'primeiro botoes_conectar: {botoes_conectar}')
-            
+            print(f'primeiro botoes_conectar: {botoes_conectar}\no tamanho atual de botoes_conectar é {len(botoes_conectar)}\n')
+
             # remover botoes que já foram clicados ao voltar para cá
             for botao in botoes_conectar:
 
-                print(f'botoes conectar do loop: {botoes_conectar}')
-
                 if botao.clicked == True:
                     botoes_conectar.remove(botao)
-                    print(f'Botão clicado encontrado! botoes_conectar: {botoes_conectar}')
+                    print(f'Botão clicado encontrado! o botão removido foi {botao} botoes_conectar: {botoes_conectar}\no tamanho atual de botoes_conectar é {len(botoes_conectar)}\n')
         except:
             print("Nenhum botão conectar encontrado!")
 
@@ -157,8 +155,8 @@ def connect(driver, count):
         sleep(randint(1,3))
 
         if len(botoes_conectar) > 0:
-                print("cheguei aqui no len")
-                continue
+            print("cheguei aqui no len")
+            continue
 
         # desce a página até o final e clica no botão avançar
         ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()

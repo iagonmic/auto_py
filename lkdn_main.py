@@ -37,6 +37,7 @@ def main(driver=None):
         lkdn_msg_new_connections(driver)
 
     else:
+        driver.quit()
         exit()
 
     main(driver)
