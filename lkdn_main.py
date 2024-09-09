@@ -1,5 +1,6 @@
 from lkdn_actions import lkdn_follow, lkdn_msg_new_connections
 from selenium_functions import define_chrome_driver
+from os import system
 
 def main(driver=None):
     print('-'*60)
@@ -40,6 +41,7 @@ def main(driver=None):
         driver.quit()
         exit()
 
+    system("clear")
     main(driver)
 
 if __name__ == "__main__":
