@@ -1,6 +1,7 @@
 from lkdn_actions import lkdn_follow, lkdn_msg_new_connections
 from selenium_functions import define_chrome_driver
 from os import system
+import platform
 
 def main(driver=None):
     print('-'*60)
@@ -41,8 +42,14 @@ def main(driver=None):
         driver.quit()
         exit()
 
-    system("clear")
+    limpar()
     main(driver)
+
+def limpar():
+    if (platform.system() == 'Windows'):
+        system('cls')
+    if (platform.system() == 'Linux'):
+        system('clear')
 
 if __name__ == "__main__":
     main()
