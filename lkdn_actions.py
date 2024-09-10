@@ -70,6 +70,7 @@ def lkdn_msg_new_connections(driver):
         enviar_mensagem_btn.click()
         sleep(randint(1,3))
 
+        # Exceção para caso seja passada a url incorreta no linkedin
         if 'https://www.linkedin.com/messaging' in driver.current_url:
             lkdn_msg_new_connections(driver)
 
@@ -77,6 +78,7 @@ def lkdn_msg_new_connections(driver):
         if len(driver.find_elements('xpath', '//div[contains(@class, "msg-s-event")]')) != 0:
             ActionChains(driver).send_keys(Keys.ESCAPE).perform()
             break
+
         # Receber texto de acordo com o usuário que está aparecendo na tela
         text = new_connection_msg(driver)
         copy(text)
@@ -101,5 +103,13 @@ def lkdn_msg_new_connections(driver):
         driver.find_element('xpath', '//button[contains(@class, "msg-form__send-button")]').click()
 
         # Verificar se mensagem foi enviada e fechar aba de mensagem atual
-        if WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "msg-s-event")]'))):
+        try:
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "msg-s-event")]')))
             ActionChains(driver).send_keys(Keys.ESCAPE).perform()
+        except:
+            # Exceção para mensagem não enviada
+            try:
+                WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//button[contains(text(), "Tente novamente")]'))).click()
+                ActionChains(driver).send_keys(Keys.ESCAPE).perform()
+            except:
+                pass
