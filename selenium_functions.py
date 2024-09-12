@@ -93,7 +93,16 @@ def connect(driver, count):
 
             pending_invite_msg_close(driver)
 
-            botao.click_button()
+            # Except: Por algum motivo, ele não retira todos os botoes clicados e permanece voltando para cá
+            try:
+                botao.click_button()
+            except Exception as e:
+                template = "Uma exceção do tipo {0} ocorreu. Argumentos:\n{1!r}"
+                message = template.format(type(e).__name__, e.args)
+                print(message)
+                botoes_conectar = []
+                break
+
             n += 1
 
             print(f"Total de botões conectados até o momento: {n}")
