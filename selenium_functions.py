@@ -208,7 +208,7 @@ Abraço,
 
 Iago Flávio."""
 
-    nome = WebDriverWait(navegador, 5).until(EC.presence_of_element_located((By.XPATH, '//a[contains(@class, "profile-card")]/span'))).text
+    nome = WebDriverWait(navegador, 10).until(EC.presence_of_element_located((By.XPATH, '//a[contains(@class, "profile-card")]/span'))).text
 
     return texto[:5] + nome.split()[0] + texto[5:]
 
