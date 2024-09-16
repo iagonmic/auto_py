@@ -9,8 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from random import randint
 from time import sleep
-from pyperclip import copy
 import selenium_functions
+import os
 
 #%%
 def lkdn_follow(text: str, driver, count, business=None):
@@ -80,8 +80,13 @@ def lkdn_msg_new_connections(driver):
             break
 
         # Receber texto de acordo com o usuário que está aparecendo na tela
-        text = new_connection_msg(driver)
-        copy(text)
+        text = None
+        new_connection_msg(driver)
+
+        with open('txt_msg.txt', 'r') as file:
+            text = file.read()
+        
+        
         # Colar texto dentro da text_box do usuário a ser enviado mensagem
         
         text_box = driver.find_element('xpath', '//div[contains(@class, "msg-form__contenteditable")]')
@@ -92,9 +97,7 @@ def lkdn_msg_new_connections(driver):
             .send_keys('a')
             .key_up(Keys.CONTROL)
             .send_keys(Keys.DELETE)
-            .key_down(Keys.CONTROL)
-            .send_keys('v')
-            .key_up(Keys.CONTROL)
+            .send_keys(text)
             .perform()
             )
         
@@ -113,3 +116,6 @@ def lkdn_msg_new_connections(driver):
                 ActionChains(driver).send_keys(Keys.ESCAPE).perform()
             except:
                 pass
+
+    # remover txt_msg.txt apos terminar o for
+    os.system('rm txt_msg.txt')

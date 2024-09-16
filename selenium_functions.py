@@ -46,10 +46,15 @@ def button_list(list):
 
 
 def define_chrome_driver():        
-    servico = Service(ChromeDriverManager().install())
+    servico = Service(ChromeDriverManager(driver_version='128.0.6613.137').install())
 
     opcoes = webdriver.ChromeOptions()
-    opcoes.add_argument('user-data-dir=C:/Users/User/AppData/Local/Google/Chrome/User Data')
+    # WINDOWS: opcoes.add_argument('user-data-dir=C:/Users/User/AppData/Local/Google/Chrome/User Data')
+
+    opcoes.binary_location = "/opt/google/chrome/google-chrome"
+    opcoes.add_argument("--no-sandbox")
+    opcoes.add_argument("--disable-dev-shm-usage")
+    opcoes.add_argument('user-data-dir=/home/iagonmic/.config/google-chrome')
     opcoes.add_experimental_option('detach', True)
 
     navegador = webdriver.Chrome(service=servico, options=opcoes)
@@ -168,7 +173,8 @@ def connect(driver, count):
             continue
 
         # desce a página até o final e clica no botão avançar
-        ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
+        # TODO: Melhorar para rolar até o final da página
+        ActionChains(driver).send_keys(Keys.PAGE_DOWN).send_keys(Keys.PAGE_DOWN).perform()
 
         botao_avancar = None
         try:
@@ -210,7 +216,10 @@ Iago Flávio."""
 
     nome = WebDriverWait(navegador, 10).until(EC.presence_of_element_located((By.XPATH, '//a[contains(@class, "profile-card")]/span'))).text
 
-    return texto[:5] + nome.split()[0] + texto[5:]
+    with open("txt_msg.txt", 'w') as file:
+        file.write(texto[:5] + nome.split()[0] + texto[5:])
+
+
 
 def eliminate_msg(driver):
     list = []

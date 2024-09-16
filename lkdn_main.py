@@ -42,7 +42,7 @@ def main(driver=None):
         driver.quit()
         exit()
 
-    limpar()
+    #limpar()
     main(driver)
 
 def limpar():
