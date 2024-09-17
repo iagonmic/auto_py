@@ -49,13 +49,17 @@ def define_chrome_driver():
     servico = Service(ChromeDriverManager(driver_version='128.0.6613.137').install())
 
     opcoes = webdriver.ChromeOptions()
-    # WINDOWS: opcoes.add_argument('user-data-dir=C:/Users/User/AppData/Local/Google/Chrome/User Data')
 
+    # LINUX:
     opcoes.binary_location = "/opt/google/chrome/google-chrome"
     opcoes.add_argument("--no-sandbox")
     opcoes.add_argument("--disable-dev-shm-usage")
     opcoes.add_argument("--start-fullscreen")
+
     opcoes.add_argument('user-data-dir=/home/iagonmic/.config/google-chrome')
+
+    # WINDOWS: opcoes.add_argument('user-data-dir=C:/Users/User/AppData/Local/Google/Chrome/User Data')
+
     opcoes.add_experimental_option('detach', True)
 
     navegador = webdriver.Chrome(service=servico, options=opcoes)
