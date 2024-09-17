@@ -54,6 +54,7 @@ def define_chrome_driver():
     opcoes.binary_location = "/opt/google/chrome/google-chrome"
     opcoes.add_argument("--no-sandbox")
     opcoes.add_argument("--disable-dev-shm-usage")
+    opcoes.add_argument("--start-fullscreen")
     opcoes.add_argument('user-data-dir=/home/iagonmic/.config/google-chrome')
     opcoes.add_experimental_option('detach', True)
 
