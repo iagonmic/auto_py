@@ -13,6 +13,9 @@ def main(driver=None):
 '''))
     print('-'*60)
 
+    email = input("Digite seu email (o email será usado apenas na automação): ")
+    password = input("Digite sua senha (a senha será usada apenas na automação): ")
+
     if opt == 1:
         business = None
         text = input("Digite o texto da barra de pesquisa (ex: 'analista de dados', 'tech recruiter'): ")
@@ -30,13 +33,13 @@ def main(driver=None):
         if driver is None:
             driver = define_chrome_driver()
 
-        lkdn_follow(text, driver, count, business)
+        lkdn_follow(text, driver, count, email, password, business)
 
     elif opt == 2:
         if driver is None:
             driver = define_chrome_driver()
 
-        lkdn_msg_new_connections(driver)
+        lkdn_msg_new_connections(driver, email, password)
 
     else:
         if driver is not None: driver.quit()

@@ -13,12 +13,12 @@ import selenium_functions
 import os
 
 #%%
-def lkdn_follow(text: str, driver, count, business=None):
+def lkdn_follow(text: str, driver, count, email, password, business=None):
     # Entrar no linkedin
-    driver.get('https://br.linkedin.com/')
+    selenium_functions.verify_lkdn_login(driver, email, password, sleep_time=3)
 
     # Buscar por analista de dados e apertar enter
-    WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '//*[@id="global-nav-typeahead"]/input'))).send_keys(str(text))
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="global-nav-typeahead"]/input'))).send_keys(str(text))
     ActionChains(driver).send_keys(Keys.ENTER).perform()
 
     sleep(randint(1,3))
@@ -45,8 +45,10 @@ def lkdn_follow(text: str, driver, count, business=None):
     selenium_functions.connect(driver, count)
 
 
-def lkdn_msg_new_connections(driver):
+def lkdn_msg_new_connections(driver, email, password):
     #%% Entrar em minha rede
+    selenium_functions.verify_lkdn_login(driver, email, password, sleep_time=3)
+
     driver.get('https://www.linkedin.com/mynetwork/invitation-manager/')
 
     eliminate_msg(driver)

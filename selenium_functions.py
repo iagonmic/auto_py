@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from random import randint
+import os
 
 class Button:
     
@@ -45,13 +46,17 @@ def button_list(list):
     return list
 
 
-def define_chrome_driver():        
-    servico = Service(ChromeDriverManager(driver_version='128.0.6613.137').install())
+def define_chrome_driver(headless=False):     
+    chrome_version = os.popen("/opt/google/chrome/google-chrome --version | awk '{print $3}'").read() # linux
+
+    servico = Service(ChromeDriverManager(driver_version=chrome_version[:-1]).install())
 
     opcoes = webdriver.ChromeOptions()
 
     # LINUX:
     opcoes.binary_location = "/opt/google/chrome/google-chrome"
+    if headless == True:
+        opcoes.add_argument("--headless")
     opcoes.add_argument("--no-sandbox")
     opcoes.add_argument("--disable-dev-shm-usage")
     opcoes.add_argument("--start-fullscreen")
@@ -245,3 +250,21 @@ def pending_invite_msg_close(driver):
         driver.find_element('xpath', '//button[@aria-label="Fechar" and .//span[contains(@class, "artdeco-button")]]').click()
     except:
         pass
+
+def verify_lkdn_login(driver, email, password, sleep_time):
+    driver.get('https://br.linkedin.com/')
+    sleep(sleep_time)
+
+    if 'feed' not in driver.current_url:
+        WebDriverWait(driver,10).until(EC.presence_of_all_elements_located((
+            By.XPATH, '//a[contains(@class, nav__button-secondary) and contains(., "Entrar")]')))[0].click()
+        WebDriverWait(driver,10).until(EC.presence_of_element_located((
+            By.XPATH, '//input[contains(@aria-label, "E-mail")]'))).click()
+        ActionChains(driver).send_keys(email).perform()
+        WebDriverWait(driver,10).until(EC.presence_of_element_located((
+            By.XPATH, '//input[contains(@aria-label, "Senha")]'))).click()
+        ActionChains(driver).send_keys(password).perform()
+        WebDriverWait(driver,10).until(EC.presence_of_all_elements_located((
+            By.XPATH, '//button[contains(@aria-label, "Entrar")]')))[0].click()
+        
+        
