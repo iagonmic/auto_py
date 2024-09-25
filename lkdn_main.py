@@ -3,7 +3,7 @@ from selenium_functions import define_chrome_driver
 from os import system
 import platform
 
-def main(driver=None):
+def main(driver=None, email=None, password=None):
     print('-'*60)
     opt = int(input(\
 '''Digite uma das opções:
@@ -13,10 +13,11 @@ def main(driver=None):
 '''))
     print('-'*60)
 
-    email = input("Digite seu email (o email será usado apenas na automação): ")
-    password = input("Digite sua senha (a senha será usada apenas na automação): ")
-
     if opt == 1:
+        if email is None and password is None:
+            email = input("Digite seu email (o email será usado apenas na automação): ")
+            password = input("Digite sua senha (a senha será usada apenas na automação): ")
+
         business = None
         text = input("Digite o texto da barra de pesquisa (ex: 'analista de dados', 'tech recruiter'): ")
 
@@ -36,17 +37,25 @@ def main(driver=None):
         lkdn_follow(text, driver, count, email, password, business)
 
     elif opt == 2:
+        if email is None and password is None:
+            email = input("Digite seu email (o email será usado apenas na automação): ")
+            password = input("Digite sua senha (a senha será usada apenas na automação): ")
+        
         if driver is None:
             driver = define_chrome_driver()
 
         lkdn_msg_new_connections(driver, email, password)
 
     else:
+        if email is None and password is None:
+            email = input("Digite seu email (o email será usado apenas na automação): ")
+            password = input("Digite sua senha (a senha será usada apenas na automação): ")
+
         if driver is not None: driver.quit()
         exit()
 
     #limpar()
-    main(driver)
+    main(driver, email, password)
 
 def limpar():
     if (platform.system() == 'Windows'):
