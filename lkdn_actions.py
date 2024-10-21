@@ -17,6 +17,8 @@ def lkdn_follow(text: str, driver, count, email, password, business=None):
     # Entrar no linkedin
     selenium_functions.verify_lkdn_login(driver, email, password, sleep_time=3)
 
+    eliminate_msg(driver)
+
     # Buscar por analista de dados e apertar enter
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="global-nav-typeahead"]/input'))).send_keys(str(text))
     ActionChains(driver).send_keys(Keys.ENTER).perform()

@@ -234,7 +234,7 @@ Iago Flávio."""
 def eliminate_msg(driver):
     list = []
     try:
-        list = WebDriverWait(driver,2).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@class, "msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary")]')))
+        list = WebDriverWait(driver,3).until(EC.presence_of_all_elements_located((By.XPATH, '//button[contains(@class, "msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary")]')))
         if len(list) == 0:
             return
     except:
@@ -243,6 +243,13 @@ def eliminate_msg(driver):
     for close_button in list:
         close_button.click()
         sleep(randint(1,2))
+
+    try:
+        WebDriverWait(driver,3).until(EC.presence_of_element_located((
+            By.XPATH, '//button[@class="mt4 mb2 artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--tertiary ember-view"]'
+        )))
+
+    except: pass
 
 def pending_invite_msg_close(driver):
     try:
