@@ -259,7 +259,7 @@ def pending_invite_msg_close(driver):
         pass
 
 def verify_lkdn_login(driver, email, password, sleep_time):
-    driver.get('https://br.linkedin.com/')
+    driver.get('https://linkedin.com/')
     sleep(sleep_time)
 
     if 'feed' not in driver.current_url:
